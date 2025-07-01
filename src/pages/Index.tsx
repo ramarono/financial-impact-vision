@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import MetricCard from "@/components/MetricCard";
 import RevenueChart from "@/components/RevenueChart";
 import KPIChart from "@/components/KPIChart";
+import ProjectionsSection from "@/components/ProjectionsSection";
 import { DollarSign, TrendingUp, TrendingDown, BarChart3, Users, Target } from "lucide-react";
 
 const Index = () => {
@@ -91,6 +92,11 @@ const Index = () => {
               icon={Target}
               description="retorno de inversión"
             />
+          </div>
+
+          {/* Projections Section */}
+          <div className="mb-8 animate-slide-up">
+            <ProjectionsSection />
           </div>
 
           {/* Charts Section */}
