@@ -57,7 +57,7 @@ const RevenueComparisonChart = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="period" />
             <YAxis 
-              formatter={(value) => `$${(value / 1000).toFixed(0)}K`}
+              tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
             />
             <Tooltip 
               formatter={(value, name) => [
