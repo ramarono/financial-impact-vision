@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Plus, Upload } from "lucide-react";
 import { useDataContext, KPIData } from "@/contexts/DataContext";
 import { useToast } from "@/hooks/use-toast";
+import CSVInstructions from "./CSVInstructions";
 
 const KPIDataLoader = () => {
   const { kpiData, addKpiData, updateKpiData, deleteKpiData, setKpiData } = useDataContext();
@@ -132,6 +132,8 @@ const KPIDataLoader = () => {
 
   return (
     <div className="space-y-6">
+      <CSVInstructions section="kpis" />
+      
       {/* Form Section */}
       <Card>
         <CardHeader>
@@ -153,6 +155,16 @@ const KPIDataLoader = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-semibold text-blue-800 mb-2">Datos utilizados en:</h4>
+            <ul className="text-blue-700 text-sm space-y-1">
+              <li>• Dashboard: Cálculo de rendimiento promedio de KPIs</li>
+              <li>• Análisis: Gráficos de performance vs metas</li>
+              <li>• Reportes: Indicadores clave de rendimiento</li>
+              <li>• Seguimiento mensual de objetivos</li>
+            </ul>
+          </div>
+          
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <Label htmlFor="month">Mes *</Label>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Plus, Upload } from "lucide-react";
 import { useDataContext, RevenueData } from "@/contexts/DataContext";
 import { useToast } from "@/hooks/use-toast";
+import CSVInstructions from "./CSVInstructions";
 
 const RevenueDataLoader = () => {
   const { revenueData, addRevenueData, updateRevenueData, deleteRevenueData, setRevenueData } = useDataContext();
@@ -126,6 +126,8 @@ const RevenueDataLoader = () => {
 
   return (
     <div className="space-y-6">
+      <CSVInstructions section="ingresos" />
+      
       {/* Form Section */}
       <Card>
         <CardHeader>
@@ -147,6 +149,16 @@ const RevenueDataLoader = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-semibold text-blue-800 mb-2">Datos utilizados en:</h4>
+            <ul className="text-blue-700 text-sm space-y-1">
+              <li>• Dashboard: Total de ingresos y cálculos de crecimiento</li>
+              <li>• Análisis: Comparaciones vs metas y tendencias</li>
+              <li>• Gráficos históricos: Evolución temporal de ingresos</li>
+              <li>• Cálculos de margen bruto y rentabilidad</li>
+            </ul>
+          </div>
+          
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <Label htmlFor="month">Mes *</Label>

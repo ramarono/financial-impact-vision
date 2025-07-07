@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Type definitions for all data structures
@@ -39,6 +38,24 @@ export interface CustomerData {
   segmento: string;
 }
 
+// Nuevos tipos para datos específicos del dashboard
+export interface DashboardMetrics {
+  id: string;
+  totalIngresos: number;
+  totalCostos: number;
+  margenBruto: number;
+  crecimientoMensual: number;
+  month: string;
+}
+
+export interface HistoricalData {
+  id: string;
+  month: string;
+  ingresos: number;
+  costos: number;
+  margen: number;
+}
+
 interface DataContextType {
   // Revenue data
   revenueData: RevenueData[];
@@ -68,6 +85,27 @@ interface DataContextType {
   updateCustomerData: (id: string, data: Partial<CustomerData>) => void;
   deleteCustomerData: (id: string) => void;
 
+  // Dashboard metrics
+  dashboardMetrics: DashboardMetrics[];
+  setDashboardMetrics: (data: DashboardMetrics[]) => void;
+  addDashboardMetrics: (data: DashboardMetrics) => void;
+  updateDashboardMetrics: (id: string, data: Partial<DashboardMetrics>) => void;
+  deleteDashboardMetrics: (id: string) => void;
+
+  // Historical data
+  historicalData: HistoricalData[];
+  setHistoricalData: (data: HistoricalData[]) => void;
+  addHistoricalData: (data: HistoricalData) => void;
+  updateHistoricalData: (id: string, data: Partial<HistoricalData>) => void;
+  deleteHistoricalData: (id: string) => void;
+
+  // Calculated values
+  getTotalRevenue: () => number;
+  getTotalCosts: () => number;
+  getMarginBruto: () => number;
+  getCrecimientoMensual: () => number;
+  getIngresosVsMesAnterior: () => { actual: number; anterior: number; cambio: number };
+
   // Utility functions
   exportAllData: () => void;
   importAllData: (data: any) => void;
@@ -84,11 +122,50 @@ export const useDataContext = () => {
   return context;
 };
 
+// Datos de muestra iniciales
+const initialRevenueData: RevenueData[] = [
+  { id: '1', month: 'Oct 2024', ingresos: 780000, meta: 750000, cliente: 'Cliente A', categoria: 'Tecnología' },
+  { id: '2', month: 'Nov 2024', ingresos: 820000, meta: 800000, cliente: 'Cliente B', categoria: 'Servicios' },
+  { id: '3', month: 'Dic 2024', ingresos: 850000, meta: 850000, cliente: 'Cliente C', categoria: 'Manufactura' }
+];
+
+const initialCostData: CostData[] = [
+  { id: '1', month: 'Oct 2024', nomina: 220000, materiales: 90000, servicios: 60000, marketing: 55000 },
+  { id: '2', month: 'Nov 2024', nomina: 225000, materiales: 92000, servicios: 62000, marketing: 58000 },
+  { id: '3', month: 'Dic 2024', nomina: 230000, materiales: 95000, servicios: 65000, marketing: 60000 }
+];
+
+const initialKPIData: KPIData[] = [
+  { id: '1', month: 'Oct 2024', nombre: 'Conversión de Ventas', valor: 12.5, meta: 15, unidad: '%' },
+  { id: '2', month: 'Nov 2024', nombre: 'Satisfacción Cliente', valor: 87, meta: 85, unidad: '%' },
+  { id: '3', month: 'Dic 2024', nombre: 'ROI Marketing', valor: 3.2, meta: 3.5, unidad: 'x' }
+];
+
+const initialCustomerData: CustomerData[] = [
+  { id: '1', nombre: 'Empresa ABC S.A.', ingresos: 1250000, crecimiento: 27.6, segmento: 'Enterprise' },
+  { id: '2', nombre: 'Corporación XYZ', ingresos: 890000, crecimiento: 18.7, segmento: 'Premium' },
+  { id: '3', nombre: 'Servicios DEF Ltda.', ingresos: 650000, crecimiento: 25.0, segmento: 'SMB' }
+];
+
+const initialDashboardMetrics: DashboardMetrics[] = [
+  { id: '1', totalIngresos: 780000, totalCostos: 425000, margenBruto: 355000, crecimientoMensual: 5.2, month: 'Oct 2024' },
+  { id: '2', totalIngresos: 820000, totalCostos: 437000, margenBruto: 383000, crecimientoMensual: 5.1, month: 'Nov 2024' }
+];
+
+const initialHistoricalData: HistoricalData[] = [
+  { id: '1', month: 'Ago 2024', ingresos: 720000, costos: 390000, margen: 330000 },
+  { id: '2', month: 'Sep 2024', ingresos: 740000, costos: 405000, margen: 335000 },
+  { id: '3', month: 'Oct 2024', ingresos: 780000, costos: 425000, margen: 355000 },
+  { id: '4', month: 'Nov 2024', ingresos: 820000, costos: 437000, margen: 383000 }
+];
+
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
-  const [costData, setCostData] = useState<CostData[]>([]);
-  const [kpiData, setKpiData] = useState<KPIData[]>([]);
-  const [customerData, setCustomerData] = useState<CustomerData[]>([]);
+  const [revenueData, setRevenueData] = useState<RevenueData[]>(initialRevenueData);
+  const [costData, setCostData] = useState<CostData[]>(initialCostData);
+  const [kpiData, setKpiData] = useState<KPIData[]>(initialKPIData);
+  const [customerData, setCustomerData] = useState<CustomerData[]>(initialCustomerData);
+  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics[]>(initialDashboardMetrics);
+  const [historicalData, setHistoricalData] = useState<HistoricalData[]>(initialHistoricalData);
 
   // Revenue data functions
   const addRevenueData = (data: RevenueData) => {
@@ -150,6 +227,64 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCustomerData(prev => prev.filter(item => item.id !== id));
   };
 
+  // Dashboard metrics functions
+  const addDashboardMetrics = (data: DashboardMetrics) => {
+    setDashboardMetrics(prev => [...prev, data]);
+  };
+
+  const updateDashboardMetrics = (id: string, updatedData: Partial<DashboardMetrics>) => {
+    setDashboardMetrics(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updatedData } : item
+    ));
+  };
+
+  const deleteDashboardMetrics = (id: string) => {
+    setDashboardMetrics(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Historical data functions
+  const addHistoricalData = (data: HistoricalData) => {
+    setHistoricalData(prev => [...prev, data]);
+  };
+
+  const updateHistoricalData = (id: string, updatedData: Partial<HistoricalData>) => {
+    setHistoricalData(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updatedData } : item
+    ));
+  };
+
+  const deleteHistoricalData = (id: string) => {
+    setHistoricalData(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Calculated values
+  const getTotalRevenue = () => {
+    return revenueData.reduce((sum, item) => sum + item.ingresos, 0);
+  };
+
+  const getTotalCosts = () => {
+    return costData.reduce((sum, item) => sum + item.nomina + item.materiales + item.servicios + item.marketing, 0);
+  };
+
+  const getMarginBruto = () => {
+    return getTotalRevenue() - getTotalCosts();
+  };
+
+  const getCrecimientoMensual = () => {
+    if (historicalData.length < 2) return 0;
+    const latest = historicalData[historicalData.length - 1];
+    const previous = historicalData[historicalData.length - 2];
+    return ((latest.ingresos - previous.ingresos) / previous.ingresos) * 100;
+  };
+
+  const getIngresosVsMesAnterior = () => {
+    if (historicalData.length < 2) return { actual: 0, anterior: 0, cambio: 0 };
+    const latest = historicalData[historicalData.length - 1];
+    const previous = historicalData[historicalData.length - 2];
+    const cambio = ((latest.ingresos - previous.ingresos) / previous.ingresos) * 100;
+    return { actual: latest.ingresos, anterior: previous.ingresos, cambio };
+  };
+
   // Utility functions
   const exportAllData = () => {
     const allData = {
@@ -157,6 +292,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       costs: costData,
       kpis: kpiData,
       customers: customerData,
+      dashboardMetrics: dashboardMetrics,
+      historicalData: historicalData,
       exportDate: new Date().toISOString()
     };
     
@@ -175,6 +312,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (data.costs) setCostData(data.costs);
     if (data.kpis) setKpiData(data.kpis);
     if (data.customers) setCustomerData(data.customers);
+    if (data.dashboardMetrics) setDashboardMetrics(data.dashboardMetrics);
+    if (data.historicalData) setHistoricalData(data.historicalData);
   };
 
   const clearAllData = () => {
@@ -182,6 +321,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCostData([]);
     setKpiData([]);
     setCustomerData([]);
+    setDashboardMetrics([]);
+    setHistoricalData([]);
   };
 
   const value = {
@@ -205,6 +346,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     addCustomerData,
     updateCustomerData,
     deleteCustomerData,
+    dashboardMetrics,
+    setDashboardMetrics,
+    addDashboardMetrics,
+    updateDashboardMetrics,
+    deleteDashboardMetrics,
+    historicalData,
+    setHistoricalData,
+    addHistoricalData,
+    updateHistoricalData,
+    deleteHistoricalData,
+    getTotalRevenue,
+    getTotalCosts,
+    getMarginBruto,
+    getCrecimientoMensual,
+    getIngresosVsMesAnterior,
     exportAllData,
     importAllData,
     clearAllData

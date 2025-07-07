@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Plus, Upload } from "lucide-react";
 import { useDataContext, CustomerData } from "@/contexts/DataContext";
 import { useToast } from "@/hooks/use-toast";
+import CSVInstructions from "./CSVInstructions";
 
 const CustomerDataLoader = () => {
   const { customerData, addCustomerData, updateCustomerData, deleteCustomerData, setCustomerData } = useDataContext();
@@ -137,6 +137,8 @@ const CustomerDataLoader = () => {
 
   return (
     <div className="space-y-6">
+      <CSVInstructions section="clientes" />
+      
       {/* Form Section */}
       <Card>
         <CardHeader>
@@ -158,6 +160,16 @@ const CustomerDataLoader = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-semibold text-blue-800 mb-2">Datos utilizados en:</h4>
+            <ul className="text-blue-700 text-sm space-y-1">
+              <li>• Análisis: Tablas de ingresos por cliente</li>
+              <li>• Dashboard: Conteo total de clientes activos</li>
+              <li>• Segmentación: Análisis por tipo de cliente</li>
+              <li>• Cálculos de crecimiento y rentabilidad por cliente</li>
+            </ul>
+          </div>
+          
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <Label htmlFor="nombre">Nombre del Cliente *</Label>
