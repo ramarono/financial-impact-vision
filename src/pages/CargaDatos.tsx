@@ -12,6 +12,7 @@ import CostDataLoader from "@/components/data-loaders/CostDataLoader";
 import KPIDataLoader from "@/components/data-loaders/KPIDataLoader";
 import CustomerDataLoader from "@/components/data-loaders/CustomerDataLoader";
 import DashboardDataLoader from "@/components/data-loaders/DashboardDataLoader";
+import AnalysisDataLoader from "@/components/data-loaders/AnalysisDataLoader";
 
 const CargaDatos = () => {
   const { exportAllData, importAllData, clearAllData } = useDataContext();
@@ -110,12 +111,13 @@ const CargaDatos = () => {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="dashboard" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
                   <TabsTrigger value="ingresos">Ingresos</TabsTrigger>
                   <TabsTrigger value="costos">Costos</TabsTrigger>
                   <TabsTrigger value="kpis">KPIs</TabsTrigger>
                   <TabsTrigger value="clientes">Clientes</TabsTrigger>
+                  <TabsTrigger value="analysis">Análisis</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="dashboard" className="mt-6">
@@ -136,6 +138,10 @@ const CargaDatos = () => {
                 
                 <TabsContent value="clientes" className="mt-6">
                   <CustomerDataLoader />
+                </TabsContent>
+                
+                <TabsContent value="analysis" className="mt-6">
+                  <AnalysisDataLoader />
                 </TabsContent>
               </Tabs>
             </CardContent>
