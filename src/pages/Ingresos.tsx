@@ -5,6 +5,7 @@ import HistoricalRevenueChart from "@/components/HistoricalRevenueChart";
 import RevenueComparisonChart from "@/components/RevenueComparisonChart";
 import RevenueProjectionsChart from "@/components/RevenueProjectionsChart";
 import CustomerRevenueTable from "@/components/CustomerRevenueTable";
+import AccountsReceivableKPIs from "@/components/AccountsReceivableKPIs";
 import { DollarSign } from "lucide-react";
 
 const Ingresos = () => {
@@ -48,8 +49,13 @@ const Ingresos = () => {
           </div>
 
           {/* Revenue Projections */}
-          <div className="animate-slide-up">
+          <div className="mb-8 animate-slide-up">
             <RevenueProjectionsChart />
+          </div>
+
+          {/* Accounts Receivable KPIs */}
+          <div className="animate-slide-up">
+            <AccountsReceivableKPIs />
           </div>
         </div>
       </main>
