@@ -9,6 +9,7 @@ import { useDataContext } from "@/contexts/DataContext";
 import { useToast } from "@/hooks/use-toast";
 import RevenueDataLoader from "@/components/data-loaders/RevenueDataLoader";
 import CostDataLoader from "@/components/data-loaders/CostDataLoader";
+import PurchaseDataLoader from "@/components/data-loaders/PurchaseDataLoader";
 import KPIDataLoader from "@/components/data-loaders/KPIDataLoader";
 import CustomerDataLoader from "@/components/data-loaders/CustomerDataLoader";
 import DashboardDataLoader from "@/components/data-loaders/DashboardDataLoader";
@@ -111,10 +112,11 @@ const CargaDatos = () => {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="dashboard" className="w-full">
-                <TabsList className="grid w-full grid-cols-6">
+                <TabsList className="grid w-full grid-cols-7">
                   <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
                   <TabsTrigger value="ingresos">Ingresos</TabsTrigger>
                   <TabsTrigger value="costos">Costos</TabsTrigger>
+                  <TabsTrigger value="compras">Compras</TabsTrigger>
                   <TabsTrigger value="kpis">KPIs</TabsTrigger>
                   <TabsTrigger value="clientes">Clientes</TabsTrigger>
                   <TabsTrigger value="analysis">Análisis</TabsTrigger>
@@ -130,6 +132,10 @@ const CargaDatos = () => {
                 
                 <TabsContent value="costos" className="mt-6">
                   <CostDataLoader />
+                </TabsContent>
+                
+                <TabsContent value="compras" className="mt-6">
+                  <PurchaseDataLoader />
                 </TabsContent>
                 
                 <TabsContent value="kpis" className="mt-6">

@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Analysis from "./pages/Analysis";
 import Ingresos from "./pages/Ingresos";
 import Costos from "./pages/Costos";
+import Compras from "./pages/Compras";
 import KPIs from "./pages/KPIs";
 import CargaDatos from "./pages/CargaDatos";
 import NotFound from "./pages/NotFound";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/ingresos" element={<Ingresos />} />
             <Route path="/costos" element={<Costos />} />
+            <Route path="/compras" element={<Compras />} />
             <Route path="/kpis" element={<KPIs />} />
             <Route path="/carga-datos" element={<CargaDatos />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

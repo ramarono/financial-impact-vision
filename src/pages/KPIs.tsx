@@ -218,10 +218,6 @@ const KPIs = () => {
                 <ResponsiveContainer width="100%" height={300}>
                   <RadialBarChart cx="50%" cy="50%" innerRadius="20%" outerRadius="90%" data={chartData}>
                     <RadialBar
-                      minAngle={15}
-                      label={{ position: 'insideStart', fill: '#fff' }}
-                      background
-                      clockWise
                       dataKey="percentage"
                       fill="#3b82f6"
                     />

@@ -56,6 +56,17 @@ export interface HistoricalData {
   margen: number;
 }
 
+export interface PurchaseData {
+  id: string;
+  month: string;
+  proveedor: string;
+  categoria: string;
+  monto: number;
+  fechaVencimiento: string;
+  estado: string;
+  diasPago: number;
+}
+
 interface DataContextType {
   // Revenue data
   revenueData: RevenueData[];
@@ -98,6 +109,13 @@ interface DataContextType {
   addHistoricalData: (data: HistoricalData) => void;
   updateHistoricalData: (id: string, data: Partial<HistoricalData>) => void;
   deleteHistoricalData: (id: string) => void;
+
+  // Purchase data
+  purchaseData: PurchaseData[];
+  setPurchaseData: (data: PurchaseData[]) => void;
+  addPurchaseData: (data: PurchaseData) => void;
+  updatePurchaseData: (id: string, data: Partial<PurchaseData>) => void;
+  deletePurchaseData: (id: string) => void;
 
   // Calculated values
   getTotalRevenue: () => number;
@@ -159,6 +177,13 @@ const initialHistoricalData: HistoricalData[] = [
   { id: '4', month: 'Nov 2024', ingresos: 820000, costos: 437000, margen: 383000 }
 ];
 
+const initialPurchaseData: PurchaseData[] = [
+  { id: '1', month: 'Oct 2024', proveedor: 'Materiales Tech S.A.', categoria: 'Materiales', monto: 85000, fechaVencimiento: '2024-11-15', estado: 'Al día', diasPago: 28 },
+  { id: '2', month: 'Oct 2024', proveedor: 'Servicios Corporativos', categoria: 'Servicios', monto: 65000, fechaVencimiento: '2024-11-20', estado: 'Pendiente', diasPago: 35 },
+  { id: '3', month: 'Nov 2024', proveedor: 'Equipos & Tecnología', categoria: 'Tecnología', monto: 45000, fechaVencimiento: '2024-12-10', estado: 'Al día', diasPago: 25 },
+  { id: '4', month: 'Nov 2024', proveedor: 'Mantenimiento Integral', categoria: 'Mantenimiento', monto: 32000, fechaVencimiento: '2024-11-30', estado: 'Vencido', diasPago: 42 }
+];
+
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [revenueData, setRevenueData] = useState<RevenueData[]>(initialRevenueData);
   const [costData, setCostData] = useState<CostData[]>(initialCostData);
@@ -166,6 +191,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [customerData, setCustomerData] = useState<CustomerData[]>(initialCustomerData);
   const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics[]>(initialDashboardMetrics);
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>(initialHistoricalData);
+  const [purchaseData, setPurchaseData] = useState<PurchaseData[]>(initialPurchaseData);
 
   // Revenue data functions
   const addRevenueData = (data: RevenueData) => {
@@ -257,6 +283,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setHistoricalData(prev => prev.filter(item => item.id !== id));
   };
 
+  // Purchase data functions
+  const addPurchaseData = (data: PurchaseData) => {
+    setPurchaseData(prev => [...prev, data]);
+  };
+
+  const updatePurchaseData = (id: string, updatedData: Partial<PurchaseData>) => {
+    setPurchaseData(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updatedData } : item
+    ));
+  };
+
+  const deletePurchaseData = (id: string) => {
+    setPurchaseData(prev => prev.filter(item => item.id !== id));
+  };
+
   // Calculated values
   const getTotalRevenue = () => {
     return revenueData.reduce((sum, item) => sum + item.ingresos, 0);
@@ -294,6 +335,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       customers: customerData,
       dashboardMetrics: dashboardMetrics,
       historicalData: historicalData,
+      purchases: purchaseData,
       exportDate: new Date().toISOString()
     };
     
@@ -314,6 +356,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (data.customers) setCustomerData(data.customers);
     if (data.dashboardMetrics) setDashboardMetrics(data.dashboardMetrics);
     if (data.historicalData) setHistoricalData(data.historicalData);
+    if (data.purchases) setPurchaseData(data.purchases);
   };
 
   const clearAllData = () => {
@@ -323,6 +366,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCustomerData([]);
     setDashboardMetrics([]);
     setHistoricalData([]);
+    setPurchaseData([]);
   };
 
   const value = {
@@ -356,6 +400,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     addHistoricalData,
     updateHistoricalData,
     deleteHistoricalData,
+    purchaseData,
+    setPurchaseData,
+    addPurchaseData,
+    updatePurchaseData,
+    deletePurchaseData,
     getTotalRevenue,
     getTotalCosts,
     getMarginBruto,

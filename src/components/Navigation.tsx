@@ -1,5 +1,5 @@
 
-import { BarChart3, DollarSign, TrendingUp, PieChart, Settings, Home, Database } from "lucide-react";
+import { BarChart3, DollarSign, TrendingUp, PieChart, Settings, Home, Database, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
@@ -7,6 +7,7 @@ const navigationItems = [
   { icon: Home, label: "Dashboard", path: "/", active: false },
   { icon: DollarSign, label: "Ingresos", path: "/ingresos", active: false },
   { icon: TrendingUp, label: "Costos", path: "/costos", active: false },
+  { icon: ShoppingCart, label: "Compras", path: "/compras", active: false },
   { icon: BarChart3, label: "KPIs", path: "/kpis", active: false },
   { icon: PieChart, label: "Análisis", path: "/analysis", active: false },
   { icon: Database, label: "Carga de Datos", path: "/carga-datos", active: false },
