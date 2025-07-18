@@ -14,13 +14,26 @@ const Index = () => {
 
   const handleLoadSampleData = () => {
     // Load sample dashboard data
-    const sampleData = [
-      { id: Date.now().toString(), month: 'Dic 2024', ingresos: 890000, meta: 850000, cliente: 'Cliente Sample', categoria: 'Servicios' },
-      { id: (Date.now() + 1).toString(), month: 'Dic 2024', nomina: 235000, materiales: 98000, servicios: 67000, marketing: 62000 }
-    ];
+    const sampleRevenueData = {
+      id: Date.now().toString(),
+      month: 'Dic 2024',
+      ingresos: 890000,
+      meta: 850000,
+      cliente: 'Cliente Sample',
+      categoria: 'Servicios'
+    };
     
-    addRevenueData(sampleData[0]);
-    addCostData(sampleData[1]);
+    const sampleCostData = {
+      id: (Date.now() + 1).toString(),
+      month: 'Dic 2024',
+      nomina: 235000,
+      materiales: 98000,
+      servicios: 67000,
+      marketing: 62000
+    };
+    
+    addRevenueData(sampleRevenueData);
+    addCostData(sampleCostData);
   };
 
   const handleImportCSV = (file: File) => {
