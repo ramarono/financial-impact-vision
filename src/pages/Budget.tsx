@@ -9,6 +9,96 @@ import Navigation from "@/components/Navigation";
 const budgetDataByYear: { [key: number]: { [key: string]: any } } = {
   2023: {
     quarters: {
+      "Jan-Mar": {
+        months: ["Jan", "Feb", "Mar"],
+        data: {
+          months: [
+            { name: "Enero", availableFunds: 26000, overspent: 0, budgeted: -26000, forNextMonth: 0, toBudget: 0 },
+            { name: "Febrero", availableFunds: 26500, overspent: 0, budgeted: -26500, forNextMonth: 0, toBudget: 0 },
+            { name: "Marzo", availableFunds: 27000, overspent: 0, budgeted: -27000, forNextMonth: 0, toBudget: 0 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  jan: { budgeted: 16000, spent: -15500, balance: 8500 },
+                  feb: { budgeted: 16500, spent: -16000, balance: 9000 },
+                  mar: { budgeted: 17000, spent: -16500, balance: 9500 }
+                },
+                {
+                  name: "Software y Licencias",
+                  jan: { budgeted: 10000, spent: -9800, balance: 200 },
+                  feb: { budgeted: 10500, spent: -10200, balance: 500 },
+                  mar: { budgeted: 11000, spent: -10700, balance: 800 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Apr-Jun": {
+        months: ["Apr", "May", "Jun"],
+        data: {
+          months: [
+            { name: "Abril", availableFunds: 27500, overspent: 0, budgeted: -27500, forNextMonth: 0, toBudget: 0 },
+            { name: "Mayo", availableFunds: 27800, overspent: 0, budgeted: -27800, forNextMonth: 0, toBudget: 0 },
+            { name: "Junio", availableFunds: 28000, overspent: 0, budgeted: -28000, forNextMonth: 0, toBudget: 200 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  apr: { budgeted: 17200, spent: -16800, balance: 9400 },
+                  may: { budgeted: 17500, spent: -17100, balance: 9700 },
+                  jun: { budgeted: 17800, spent: -17400, balance: 10000 }
+                },
+                {
+                  name: "Software y Licencias",
+                  apr: { budgeted: 11200, spent: -10900, balance: 600 },
+                  may: { budgeted: 11500, spent: -11200, balance: 700 },
+                  jun: { budgeted: 11800, spent: -11500, balance: 900 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Jul-Sep": {
+        months: ["Jul", "Aug", "Sep"],
+        data: {
+          months: [
+            { name: "Julio", availableFunds: 28200, overspent: 0, budgeted: -28000, forNextMonth: 0, toBudget: 200 },
+            { name: "Agosto", availableFunds: 28500, overspent: 0, budgeted: -28200, forNextMonth: 0, toBudget: 300 },
+            { name: "Septiembre", availableFunds: 28800, overspent: 0, budgeted: -28500, forNextMonth: 0, toBudget: 300 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  jul: { budgeted: 17900, spent: -17600, balance: 9800 },
+                  aug: { budgeted: 18200, spent: -17900, balance: 10100 },
+                  sep: { budgeted: 18500, spent: -18200, balance: 10400 }
+                },
+                {
+                  name: "Software y Licencias",
+                  jul: { budgeted: 11900, spent: -11600, balance: 1000 },
+                  aug: { budgeted: 12000, spent: -11700, balance: 1100 },
+                  sep: { budgeted: 12200, spent: -11900, balance: 1200 }
+                }
+              ]
+            }
+          ]
+        }
+      },
       "Oct-Dec": {
         months: ["Oct", "Nov", "Dec"],
         data: {
@@ -127,6 +217,100 @@ const budgetDataByYear: { [key: number]: { [key: string]: any } } = {
                   jul: { budgeted: 13700, spent: -13504, balance: 1232 },
                   aug: { budgeted: 14000, spent: -13800, balance: 1400 },
                   sep: { budgeted: 14200, spent: -14000, balance: 1600 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Oct-Dec": {
+        months: ["Oct", "Nov", "Dec"],
+        data: {
+          months: [
+            { name: "Octubre", availableFunds: 34500, overspent: 0, budgeted: -34000, forNextMonth: 0, toBudget: 500 },
+            { name: "Noviembre", availableFunds: 35000, overspent: 0, budgeted: -34500, forNextMonth: 0, toBudget: 500 },
+            { name: "Diciembre", availableFunds: 35500, overspent: 0, budgeted: -35000, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  oct: { budgeted: 22500, spent: -21800, balance: 12700 },
+                  nov: { budgeted: 23000, spent: -22300, balance: 13200 },
+                  dec: { budgeted: 23500, spent: -22800, balance: 13700 }
+                },
+                {
+                  name: "Software y Licencias",
+                  oct: { budgeted: 14500, spent: -14200, balance: 1700 },
+                  nov: { budgeted: 14800, spent: -14500, balance: 1800 },
+                  dec: { budgeted: 15000, spent: -14700, balance: 2100 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  2025: {
+    quarters: {
+      "Jan-Mar": {
+        months: ["Jan", "Feb", "Mar"],
+        data: {
+          months: [
+            { name: "Enero", availableFunds: 36000, overspent: 0, budgeted: -35500, forNextMonth: 0, toBudget: 500 },
+            { name: "Febrero", availableFunds: 36500, overspent: 0, budgeted: -36000, forNextMonth: 0, toBudget: 500 },
+            { name: "Marzo", availableFunds: 37000, overspent: 0, budgeted: -36500, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  jan: { budgeted: 24000, spent: -23200, balance: 14200 },
+                  feb: { budgeted: 24500, spent: -23700, balance: 14700 },
+                  mar: { budgeted: 25000, spent: -24200, balance: 15200 }
+                },
+                {
+                  name: "Software y Licencias",
+                  jan: { budgeted: 15200, spent: -14900, balance: 2100 },
+                  feb: { budgeted: 15500, spent: -15200, balance: 2200 },
+                  mar: { budgeted: 15800, spent: -15500, balance: 2300 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Apr-Jun": {
+        months: ["Apr", "May", "Jun"],
+        data: {
+          months: [
+            { name: "Abril", availableFunds: 37500, overspent: 0, budgeted: -37000, forNextMonth: 0, toBudget: 500 },
+            { name: "Mayo", availableFunds: 38000, overspent: 0, budgeted: -37500, forNextMonth: 0, toBudget: 500 },
+            { name: "Junio", availableFunds: 38500, overspent: 0, budgeted: -38000, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  apr: { budgeted: 25500, spent: -24800, balance: 15700 },
+                  may: { budgeted: 26000, spent: -25300, balance: 16200 },
+                  jun: { budgeted: 26500, spent: -25800, balance: 16700 }
+                },
+                {
+                  name: "Software y Licencias",
+                  apr: { budgeted: 16000, spent: -15700, balance: 2400 },
+                  may: { budgeted: 16300, spent: -16000, balance: 2500 },
+                  jun: { budgeted: 16600, spent: -16300, balance: 2600 }
                 }
               ]
             }
@@ -289,7 +473,7 @@ const Budget = () => {
                   </TableHeader>
                   <TableBody>
                     {currentData.categories.map((category, categoryIndex) => (
-                      <div key={categoryIndex}>
+                      <React.Fragment key={categoryIndex}>
                         <TableRow className="hover:bg-muted/20">
                           <TableCell className="flex items-center gap-2 py-3">
                             <Button
@@ -336,7 +520,7 @@ const Budget = () => {
                             </TableRow>
                           );
                         })}
-                      </div>
+                      </React.Fragment>
                     ))}
 
                     {/* Add Group Button */}
