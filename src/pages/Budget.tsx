@@ -1,236 +1,294 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 
-const budgetData = [
-  {
-    category: "Salarios y Nómina",
-    q1: { budgeted: 45000, spent: 44500, balance: 500 },
-    q2: { budgeted: 47000, spent: 46800, balance: 200 },
-    q3: { budgeted: 48000, spent: 47200, balance: 800 },
-    q4: { budgeted: 50000, spent: 49500, balance: 500 }
-  },
-  {
-    category: "Software y Licencias",
-    q1: { budgeted: 8500, spent: 8200, balance: 300 },
-    q2: { budgeted: 9000, spent: 8900, balance: 100 },
-    q3: { budgeted: 9200, spent: 9100, balance: 100 },
-    q4: { budgeted: 9500, spent: 9300, balance: 200 }
-  },
-  {
-    category: "Hardware y Equipos",
-    q1: { budgeted: 5000, spent: 4800, balance: 200 },
-    q2: { budgeted: 3000, spent: 3200, balance: -200 },
-    q3: { budgeted: 4000, spent: 3800, balance: 200 },
-    q4: { budgeted: 6000, spent: 5900, balance: 100 }
-  },
-  {
-    category: "Internet y Telecomunicaciones",
-    q1: { budgeted: 2500, spent: 2400, balance: 100 },
-    q2: { budgeted: 2500, spent: 2500, balance: 0 },
-    q3: { budgeted: 2600, spent: 2550, balance: 50 },
-    q4: { budgeted: 2700, spent: 2650, balance: 50 }
-  },
-  {
-    category: "Oficina y Alquiler",
-    q1: { budgeted: 12000, spent: 12000, balance: 0 },
-    q2: { budgeted: 12000, spent: 12000, balance: 0 },
-    q3: { budgeted: 12500, spent: 12500, balance: 0 },
-    q4: { budgeted: 12500, spent: 12500, balance: 0 }
-  },
-  {
-    category: "Marketing y Publicidad",
-    q1: { budgeted: 4000, spent: 3800, balance: 200 },
-    q2: { budgeted: 5000, spent: 5200, balance: -200 },
-    q3: { budgeted: 4500, spent: 4300, balance: 200 },
-    q4: { budgeted: 6000, spent: 5800, balance: 200 }
-  },
-  {
-    category: "Capacitación y Desarrollo",
-    q1: { budgeted: 3000, spent: 2800, balance: 200 },
-    q2: { budgeted: 3500, spent: 3600, balance: -100 },
-    q3: { budgeted: 4000, spent: 3900, balance: 100 },
-    q4: { budgeted: 3000, spent: 2900, balance: 100 }
-  },
-  {
-    category: "Servicios Profesionales",
-    q1: { budgeted: 2000, spent: 1800, balance: 200 },
-    q2: { budgeted: 2500, spent: 2400, balance: 100 },
-    q3: { budgeted: 2200, spent: 2100, balance: 100 },
-    q4: { budgeted: 2800, spent: 2700, balance: 100 }
-  },
-  {
-    category: "Gastos Operativos",
-    q1: { budgeted: 1500, spent: 1400, balance: 100 },
-    q2: { budgeted: 1600, spent: 1550, balance: 50 },
-    q3: { budgeted: 1700, spent: 1650, balance: 50 },
-    q4: { budgeted: 1800, spent: 1750, balance: 50 }
+const budgetData = {
+  months: [
+    {
+      name: "Mayo",
+      availableFunds: 32000,
+      overspent: 0,
+      budgeted: -32000,
+      forNextMonth: 0,
+      toBudget: 0
+    },
+    {
+      name: "Junio", 
+      availableFunds: 32000,
+      overspent: 0,
+      budgeted: -32000,
+      forNextMonth: 0,
+      toBudget: 0
+    },
+    {
+      name: "Julio",
+      availableFunds: 33253,
+      overspent: 0,
+      budgeted: -32000,
+      forNextMonth: 0,
+      toBudget: 1253
+    }
+  ],
+  categories: [
+    {
+      name: "Gastos Realmente Importantes",
+      expanded: true,
+      items: [
+        {
+          name: "Nómina y Salarios",
+          may: { budgeted: 19950, spent: -17766, balance: 10511 },
+          june: { budgeted: 21850, spent: -16230, balance: 16131 },
+          july: { budgeted: 20950, spent: -17367, balance: 19714 }
+        },
+        {
+          name: "Software y Licencias",
+          may: { budgeted: 13700, spent: -13504, balance: 840 },
+          june: { budgeted: 13700, spent: -13504, balance: 1036 },
+          july: { budgeted: 13700, spent: -13504, balance: 1232 }
+        },
+        {
+          name: "Seguros",
+          may: { budgeted: 650, spent: -1237, balance: 126 },
+          june: { budgeted: 650, spent: 0, balance: 776 },
+          july: { budgeted: 650, spent: -1237, balance: 189 }
+        },
+        {
+          name: "Internet",
+          may: { budgeted: 880, spent: -873, balance: 28 },
+          june: { budgeted: 880, spent: -873, balance: 35 },
+          july: { budgeted: 880, spent: -873, balance: 42 }
+        },
+        {
+          name: "Electricidad",
+          may: { budgeted: 2000, spent: -2152, balance: 1162 },
+          june: { budgeted: 2000, spent: -1853, balance: 1309 },
+          july: { budgeted: 2000, spent: -1753, balance: 1556 }
+        },
+        {
+          name: "Ahorros para imprevistos",
+          may: { budgeted: 2720, spent: 0, balance: 8355 },
+          june: { budgeted: 4620, spent: 0, balance: 12975 },
+          july: { budgeted: 3720, spent: 0, balance: 16695 }
+        }
+      ]
+    },
+    {
+      name: "Gastos Diarios",
+      expanded: true,
+      total: {
+        may: { budgeted: 12050, spent: -9714, balance: 9412 },
+        june: { budgeted: 10150, spent: -11065, balance: 8497 },
+        july: { budgeted: 11050, spent: -10036, balance: 9511 }
+      }
+    }
+  ],
+  income: {
+    may: { received: 32000 },
+    june: { received: 32000 },
+    july: { received: 33253 }
   }
-];
-
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 0
-  }).format(amount);
 };
 
-const getBalanceColor = (balance: number) => {
-  if (balance > 0) return "text-success";
-  if (balance < 0) return "text-destructive";
-  return "text-muted-foreground";
-};
-
-const getTotals = (quarter: 'q1' | 'q2' | 'q3' | 'q4') => {
-  const totals = budgetData.reduce(
-    (acc, item) => ({
-      budgeted: acc.budgeted + item[quarter].budgeted,
-      spent: acc.spent + item[quarter].spent,
-      balance: acc.balance + item[quarter].balance
-    }),
-    { budgeted: 0, spent: 0, balance: 0 }
-  );
-  return totals;
+const formatNumber = (num: number) => {
+  if (num === 0) return "0";
+  return num.toLocaleString();
 };
 
 const Budget = () => {
-  const quarters = [
-    { key: 'q1' as const, label: 'Q1 2024' },
-    { key: 'q2' as const, label: 'Q2 2024' },
-    { key: 'q3' as const, label: 'Q3 2024' },
-    { key: 'q4' as const, label: 'Q4 2024' }
-  ];
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(["Gastos Realmente Importantes", "Gastos Diarios"]);
+
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategories(prev =>
+      prev.includes(categoryName)
+        ? prev.filter(name => name !== categoryName)
+        : [...prev, categoryName]
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <Navigation />
       
-      <main className="ml-64 pt-16 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Presupuesto Anual
-            </h1>
-            <p className="text-muted-foreground">
-              Control de presupuesto por trimestres - Consultoría de Tecnología
-            </p>
+      <main className="ml-64 pt-16 p-4">
+        <div className="max-w-full">
+          {/* Month Cards */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {budgetData.months.map((month, index) => (
+              <Card key={index} className="p-4">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-lg font-semibold">{month.name}</h3>
+                  <Button variant="ghost" size="sm">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>{formatNumber(month.availableFunds)}</span>
+                    <span className="text-muted-foreground">Available Funds</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>-{formatNumber(Math.abs(month.overspent))}</span>
+                    <span className="text-muted-foreground">Overspent in Apr</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>{formatNumber(month.budgeted)}</span>
+                    <span className="text-muted-foreground">Budgeted</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>-{formatNumber(Math.abs(month.forNextMonth))}</span>
+                    <span className="text-muted-foreground">For Next Month</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t">
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-1">To Budget:</p>
+                    <p className="text-3xl font-bold text-purple-600">{formatNumber(month.toBudget)}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
           </div>
 
+          {/* Budget Table */}
           <Card>
-            <CardHeader>
-              <CardTitle>Presupuesto por Trimestres 2024</CardTitle>
-              <CardDescription>
-                Seguimiento de gastos principales organizados por trimestres
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-48 font-semibold">Categoría</TableHead>
-                      {quarters.map((quarter) => (
-                        <TableHead key={quarter.key} className="text-center">
-                          <div className="space-y-1">
-                            <div className="font-semibold">{quarter.label}</div>
-                            <div className="flex space-x-4 text-xs text-muted-foreground">
-                              <span>Presup.</span>
-                              <span>Gastado</span>
-                              <span>Balance</span>
-                            </div>
-                          </div>
-                        </TableHead>
-                      ))}
+                    <TableRow className="bg-muted/30">
+                      <TableHead className="w-80">Category</TableHead>
+                      <TableHead className="text-center w-32">Budgeted<br/>32 000</TableHead>
+                      <TableHead className="text-center w-32">Spent<br/>-27 480</TableHead>
+                      <TableHead className="text-center w-32">Balance<br/>19 923</TableHead>
+                      <TableHead className="text-center w-32">Budgeted<br/>32 000</TableHead>
+                      <TableHead className="text-center w-32">Spent<br/>-27 279</TableHead>
+                      <TableHead className="text-center w-32">Balance<br/>24 636</TableHead>
+                      <TableHead className="text-center w-32">Budgeted<br/>32 000</TableHead>
+                      <TableHead className="text-center w-32">Spent<br/>-27 403</TableHead>
+                      <TableHead className="text-center w-32">Balance<br/>29 002</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {budgetData.map((item, index) => (
-                      <TableRow key={index} className="hover:bg-muted/50">
-                        <TableCell className="font-medium">
-                          {item.category}
-                        </TableCell>
-                        {quarters.map((quarter) => (
-                          <TableCell key={quarter.key} className="text-center">
-                            <div className="space-y-1">
-                              <div className="text-sm">
-                                {formatCurrency(item[quarter.key].budgeted)}
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                {formatCurrency(item[quarter.key].spent)}
-                              </div>
-                              <div className={`text-sm font-medium ${getBalanceColor(item[quarter.key].balance)}`}>
-                                {formatCurrency(item[quarter.key].balance)}
-                              </div>
-                            </div>
+                    {budgetData.categories.map((category, categoryIndex) => (
+                      <React.Fragment key={categoryIndex}>
+                        <TableRow className="hover:bg-muted/20">
+                          <TableCell className="flex items-center gap-2 py-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="p-0 h-6 w-6"
+                              onClick={() => toggleCategory(category.name)}
+                            >
+                              {expandedCategories.includes(category.name) ? 
+                                <ChevronDown className="h-4 w-4" /> : 
+                                <ChevronRight className="h-4 w-4" />
+                              }
+                            </Button>
+                            <span className="font-medium">{category.name}</span>
                           </TableCell>
+                          
+                          {category.total && (
+                            <>
+                              <TableCell className="text-center">{formatNumber(category.total.may.budgeted)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.may.spent)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.may.balance)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.june.budgeted)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.june.spent)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.june.balance)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.july.budgeted)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.july.spent)}</TableCell>
+                              <TableCell className="text-center">{formatNumber(category.total.july.balance)}</TableCell>
+                            </>
+                          )}
+                          
+                          {!category.total && (
+                            <>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                              <TableCell className="text-center"></TableCell>
+                            </>
+                          )}
+                        </TableRow>
+
+                        {expandedCategories.includes(category.name) && category.items && category.items.map((item, itemIndex) => (
+                          <TableRow key={itemIndex} className="hover:bg-muted/10">
+                            <TableCell className="pl-12">{item.name}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.may.budgeted)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.may.spent)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.may.balance)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.june.budgeted)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.june.spent)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.june.balance)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.july.budgeted)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.july.spent)}</TableCell>
+                            <TableCell className="text-center">{formatNumber(item.july.balance)}</TableCell>
+                          </TableRow>
                         ))}
-                      </TableRow>
+                      </React.Fragment>
                     ))}
-                    <TableRow className="border-t-2 font-semibold bg-muted/30">
-                      <TableCell className="font-bold">TOTAL</TableCell>
-                      {quarters.map((quarter) => {
-                        const totals = getTotals(quarter.key);
-                        return (
-                          <TableCell key={quarter.key} className="text-center">
-                            <div className="space-y-1">
-                              <div className="text-sm font-bold">
-                                {formatCurrency(totals.budgeted)}
-                              </div>
-                              <div className="text-sm font-bold text-muted-foreground">
-                                {formatCurrency(totals.spent)}
-                              </div>
-                              <div className={`text-sm font-bold ${getBalanceColor(totals.balance)}`}>
-                                {formatCurrency(totals.balance)}
-                              </div>
-                            </div>
-                          </TableCell>
-                        );
-                      })}
+
+                    {/* Add Group Button */}
+                    <TableRow>
+                      <TableCell colSpan={10} className="text-center py-4">
+                        <Button variant="outline" size="sm">
+                          Add Group
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+
+                    {/* Income Section */}
+                    <TableRow className="border-t-2">
+                      <TableCell className="flex items-center gap-2 py-3">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-0 h-6 w-6"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                        <span className="font-medium">Income</span>
+                      </TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-medium">Received</TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-medium">Received</TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-medium">Received</TableCell>
+                    </TableRow>
+                    
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.may.received)}</TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.june.received)}</TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center"></TableCell>
+                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.july.received)}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </div>
             </CardContent>
           </Card>
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-            {quarters.map((quarter) => {
-              const totals = getTotals(quarter.key);
-              const efficiency = ((totals.budgeted - totals.spent) / totals.budgeted * 100);
-              
-              return (
-                <Card key={quarter.key}>
-                  <CardContent className="p-4">
-                    <div className="text-center">
-                      <h3 className="font-semibold text-lg mb-2">{quarter.label}</h3>
-                      <div className="space-y-2">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Presupuestado</p>
-                          <p className="font-bold">{formatCurrency(totals.budgeted)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Gastado</p>
-                          <p className="font-bold">{formatCurrency(totals.spent)}</p>
-                        </div>
-                        <div>
-                          <Badge 
-                            variant={efficiency >= 0 ? "default" : "destructive"}
-                            className="text-xs"
-                          >
-                            {efficiency >= 0 ? "Bajo presupuesto" : "Sobre presupuesto"}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
         </div>
       </main>
     </div>
