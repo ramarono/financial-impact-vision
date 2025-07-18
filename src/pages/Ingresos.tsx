@@ -13,17 +13,34 @@ import { useDataContext } from "@/contexts/DataContext";
 const Ingresos = () => {
   const { addRevenueData, addCustomerData } = useDataContext();
 
-  const handleLoadSampleData = () => {
-    const sampleRevenueData = [
-      { id: Date.now().toString(), month: 'Dic 2024', ingresos: 890000, meta: 850000, cliente: 'Tech Corp', categoria: 'Tecnología' },
-      { id: (Date.now() + 1).toString(), month: 'Dic 2024', ingresos: 720000, meta: 700000, cliente: 'Service Plus', categoria: 'Servicios' }
-    ];
-    
-    sampleRevenueData.forEach(data => addRevenueData(data));
-  };
+  const handleImportCSV = (data: any[]) => {
+    data.forEach(row => {
+      if (row.ingresos && row.mes && row.año) {
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const monthName = monthNames[row.mes - 1] || 'Ene';
+        
+        addRevenueData({
+          id: row.id || Date.now().toString(),
+          month: `${monthName} ${row.año}`,
+          ingresos: row.ingresos,
+          meta: row.meta || row.ingresos * 0.9,
+          cliente: row.cliente || 'Cliente Importado',
+          categoria: row.categoria || 'General'
+        });
 
-  const handleImportCSV = (file: File) => {
-    console.log('Importing revenue CSV:', file.name);
+        // Also add customer data if new
+        if (row.cliente) {
+          addCustomerData({
+            id: `customer-${Date.now()}`,
+            nombre: row.cliente,
+            ingresos: row.ingresos,
+            crecimiento: Math.random() * 30, // Placeholder
+            segmento: row.categoria || 'General'
+          });
+        }
+      }
+    });
   };
 
   const handleManualEntry = (data: any) => {
@@ -34,12 +51,13 @@ const Ingresos = () => {
     addRevenueData(newRevenueData);
   };
 
-  const csvTemplate = `mes,ingresos,meta,cliente,categoria
-Dic 2024,850000,800000,Cliente Ejemplo,Servicios
-Dic 2024,720000,700000,Otro Cliente,Tecnología`;
+  const csvTemplate = `mes,año,ingresos,meta,cliente,categoria
+12,2024,850000,800000,Cliente Ejemplo,Servicios
+11,2024,720000,700000,Otro Cliente,Tecnología`;
 
   const manualFields = [
-    { name: 'month', label: 'Mes', type: 'text' as const, required: true },
+    { name: 'mes', label: 'Mes (1-12)', type: 'number' as const, required: true },
+    { name: 'año', label: 'Año', type: 'number' as const, required: true },
     { name: 'ingresos', label: 'Ingresos', type: 'number' as const, required: true },
     { name: 'meta', label: 'Meta', type: 'number' as const, required: true },
     { name: 'cliente', label: 'Cliente', type: 'text' as const, required: true },
@@ -75,10 +93,8 @@ Dic 2024,720000,700000,Otro Cliente,Tecnología`;
             <QuickDataLoader
               title="Datos de Ingresos"
               description="Gestiona tus datos de ingresos por clientes, categorías y períodos"
-              onLoadSampleData={handleLoadSampleData}
               onImportCSV={handleImportCSV}
               onManualEntry={handleManualEntry}
-              sampleDataCount={5}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
             />

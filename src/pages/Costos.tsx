@@ -12,17 +12,25 @@ import { useDataContext } from "@/contexts/DataContext";
 const Costos = () => {
   const { addCostData } = useDataContext();
 
-  const handleLoadSampleData = () => {
-    const sampleCostData = [
-      { id: Date.now().toString(), month: 'Dic 2024', nomina: 245000, materiales: 102000, servicios: 68000, marketing: 65000 },
-      { id: (Date.now() + 1).toString(), month: 'Dic 2024', nomina: 238000, materiales: 95000, servicios: 72000, marketing: 58000 }
-    ];
-    
-    sampleCostData.forEach(data => addCostData(data));
-  };
-
-  const handleImportCSV = (file: File) => {
-    console.log('Importing costs CSV:', file.name);
+  const handleImportCSV = (data: any[]) => {
+    data.forEach(row => {
+      if ((row.nomina || row.materiales || row.servicios || row.marketing) && row.mes && row.año) {
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const monthName = monthNames[row.mes - 1] || 'Ene';
+        
+        addCostData({
+          id: row.id || Date.now().toString(),
+          month: `${monthName} ${row.año}`,
+          nomina: row.nomina || 0,
+          materiales: row.materiales || 0,
+          servicios: row.servicios || 0,
+          marketing: row.marketing || 0,
+          categoria: row.categoria,
+          descripcion: row.descripcion
+        });
+      }
+    });
   };
 
   const handleManualEntry = (data: any) => {
@@ -33,11 +41,13 @@ const Costos = () => {
     addCostData(newCostData);
   };
 
-  const csvTemplate = `mes,nomina,materiales,servicios,marketing,categoria,descripcion
-Dic 2024,240000,95000,65000,60000,Operacional,Costos operacionales del mes`;
+  const csvTemplate = `mes,año,nomina,materiales,servicios,marketing,categoria,descripcion
+12,2024,240000,95000,65000,60000,Operacional,Costos operacionales del mes
+11,2024,235000,92000,62000,58000,Operacional,Costos operacionales del mes anterior`;
 
   const manualFields = [
-    { name: 'month', label: 'Mes', type: 'text' as const, required: true },
+    { name: 'mes', label: 'Mes (1-12)', type: 'number' as const, required: true },
+    { name: 'año', label: 'Año', type: 'number' as const, required: true },
     { name: 'nomina', label: 'Nómina', type: 'number' as const, required: true },
     { name: 'materiales', label: 'Materiales', type: 'number' as const, required: true },
     { name: 'servicios', label: 'Servicios', type: 'number' as const, required: true },
@@ -75,10 +85,8 @@ Dic 2024,240000,95000,65000,60000,Operacional,Costos operacionales del mes`;
             <QuickDataLoader
               title="Datos de Costos"
               description="Gestiona los costos por categorías: nómina, materiales, servicios y marketing"
-              onLoadSampleData={handleLoadSampleData}
               onImportCSV={handleImportCSV}
               onManualEntry={handleManualEntry}
-              sampleDataCount={4}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
             />

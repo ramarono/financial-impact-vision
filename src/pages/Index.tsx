@@ -10,51 +10,105 @@ import { DollarSign, TrendingUp, TrendingDown, BarChart3, Users, Target } from "
 import { useDataContext } from "@/contexts/DataContext";
 
 const Index = () => {
-  const { addRevenueData, addCostData, addDashboardMetrics } = useDataContext();
+  const { 
+    addRevenueData, 
+    addCostData, 
+    addDashboardMetrics,
+    getTotalRevenue,
+    getTotalCosts,
+    getMarginBruto,
+    getCrecimientoMensual
+  } = useDataContext();
 
-  const handleLoadSampleData = () => {
-    // Load sample dashboard data
-    const sampleRevenueData = {
-      id: Date.now().toString(),
-      month: 'Dic 2024',
-      ingresos: 890000,
-      meta: 850000,
-      cliente: 'Cliente Sample',
-      categoria: 'Servicios'
-    };
-    
-    const sampleCostData = {
-      id: (Date.now() + 1).toString(),
-      month: 'Dic 2024',
-      nomina: 235000,
-      materiales: 98000,
-      servicios: 67000,
-      marketing: 62000
-    };
-    
-    addRevenueData(sampleRevenueData);
-    addCostData(sampleCostData);
-  };
+  const handleImportCSV = (data: any[]) => {
+    // Process each row and add to appropriate data stores
+    data.forEach(row => {
+      if (row.ingresos && row.mes && row.año) {
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const monthName = monthNames[row.mes - 1] || 'Ene';
+        
+        addRevenueData({
+          id: row.id || Date.now().toString(),
+          month: `${monthName} ${row.año}`,
+          ingresos: row.ingresos,
+          meta: row.meta || row.ingresos * 0.9,
+          cliente: row.cliente || 'Cliente Importado',
+          categoria: row.categoria || 'General'
+        });
+      }
 
-  const handleImportCSV = (file: File) => {
-    // Basic CSV processing (in real app, parse and validate)
-    console.log('Importing CSV file:', file.name);
+      if (row.nomina || row.materiales || row.servicios || row.marketing) {
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const monthName = monthNames[(row.mes || 1) - 1] || 'Ene';
+        
+        addCostData({
+          id: row.id || Date.now().toString(),
+          month: `${monthName} ${row.año || new Date().getFullYear()}`,
+          nomina: row.nomina || 0,
+          materiales: row.materiales || 0,
+          servicios: row.servicios || 0,
+          marketing: row.marketing || 0,
+          categoria: row.categoria,
+          descripcion: row.descripcion
+        });
+      }
+    });
   };
 
   const handleManualEntry = (data: any) => {
-    // Process manual entry data
-    console.log('Adding manual data:', data);
+    if (data.tipo === 'ingresos') {
+      addRevenueData({
+        id: data.id,
+        month: data.month,
+        ingresos: data.ingresos,
+        meta: data.meta,
+        cliente: data.cliente,
+        categoria: data.categoria
+      });
+    } else if (data.tipo === 'costos') {
+      addCostData({
+        id: data.id,
+        month: data.month,
+        nomina: data.nomina || 0,
+        materiales: data.materiales || 0,
+        servicios: data.servicios || 0,
+        marketing: data.marketing || 0,
+        categoria: data.categoria,
+        descripcion: data.descripcion
+      });
+    }
   };
 
-  const csvTemplate = `mes,ingresos,meta,cliente,categoria
-Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
+  const handleLoadToDashboard = () => {
+    // Refresh dashboard metrics
+    const newMetrics = {
+      id: Date.now().toString(),
+      totalIngresos: getTotalRevenue(),
+      totalCostos: getTotalCosts(),
+      margenBruto: getMarginBruto(),
+      crecimientoMensual: getCrecimientoMensual(),
+      month: new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' })
+    };
+    
+    addDashboardMetrics(newMetrics);
+  };
+
+  const csvTemplate = `mes,año,ingresos,meta,cliente,categoria,nomina,materiales,servicios,marketing,descripcion
+12,2024,850000,800000,Cliente Ejemplo,Servicios,220000,95000,65000,60000,Datos de ejemplo`;
 
   const manualFields = [
+    { name: 'tipo', label: 'Tipo de Dato', type: 'select' as const, options: ['ingresos', 'costos'], required: true },
     { name: 'month', label: 'Mes', type: 'text' as const, required: true },
-    { name: 'ingresos', label: 'Ingresos', type: 'number' as const, required: true },
-    { name: 'meta', label: 'Meta', type: 'number' as const, required: true },
+    { name: 'ingresos', label: 'Ingresos', type: 'number' as const },
+    { name: 'meta', label: 'Meta', type: 'number' as const },
     { name: 'cliente', label: 'Cliente', type: 'text' as const },
-    { name: 'categoria', label: 'Categoría', type: 'select' as const, options: ['Servicios', 'Tecnología', 'Manufactura'] }
+    { name: 'nomina', label: 'Nómina', type: 'number' as const },
+    { name: 'materiales', label: 'Materiales', type: 'number' as const },
+    { name: 'servicios', label: 'Servicios', type: 'number' as const },
+    { name: 'marketing', label: 'Marketing', type: 'number' as const },
+    { name: 'categoria', label: 'Categoría', type: 'select' as const, options: ['Servicios', 'Tecnología', 'Manufactura', 'Operacional', 'Administrativo'] }
   ];
 
   return (
@@ -79,10 +133,9 @@ Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
             <QuickDataLoader
               title="Datos del Dashboard"
               description="Gestiona los datos principales del dashboard de forma rápida y eficiente"
-              onLoadSampleData={handleLoadSampleData}
               onImportCSV={handleImportCSV}
               onManualEntry={handleManualEntry}
-              sampleDataCount={3}
+              onLoadToDashboard={handleLoadToDashboard}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
             />
@@ -93,7 +146,7 @@ Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
             <div className="gradient-success rounded-xl">
               <MetricCard
                 title="Ingresos Totales"
-                value="$485,200"
+                value={`$${getTotalRevenue().toLocaleString()}`}
                 change="+12.5%"
                 changeType="positive"
                 icon={DollarSign}
@@ -105,7 +158,7 @@ Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
             <div className="gradient-warning rounded-xl">
               <MetricCard
                 title="Costos Operativos"
-                value="$187,500"
+                value={`$${getTotalCosts().toLocaleString()}`}
                 change="-3.2%"
                 changeType="positive"
                 icon={TrendingDown}
@@ -117,7 +170,7 @@ Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
             <div className="gradient-info rounded-xl">
               <MetricCard
                 title="Utilidad Neta"
-                value="$297,700"
+                value={`$${getMarginBruto().toLocaleString()}`}
                 change="+18.7%"
                 changeType="positive"
                 icon={TrendingUp}
