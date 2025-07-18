@@ -6,92 +6,143 @@ import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 
-const budgetData = {
-  months: [
-    {
-      name: "Mayo",
-      availableFunds: 32000,
-      overspent: 0,
-      budgeted: -32000,
-      forNextMonth: 0,
-      toBudget: 0
-    },
-    {
-      name: "Junio", 
-      availableFunds: 32000,
-      overspent: 0,
-      budgeted: -32000,
-      forNextMonth: 0,
-      toBudget: 0
-    },
-    {
-      name: "Julio",
-      availableFunds: 33253,
-      overspent: 0,
-      budgeted: -32000,
-      forNextMonth: 0,
-      toBudget: 1253
-    }
-  ],
-  categories: [
-    {
-      name: "Gastos Realmente Importantes",
-      expanded: true,
-      items: [
-        {
-          name: "Nómina y Salarios",
-          may: { budgeted: 19950, spent: -17766, balance: 10511 },
-          june: { budgeted: 21850, spent: -16230, balance: 16131 },
-          july: { budgeted: 20950, spent: -17367, balance: 19714 }
-        },
-        {
-          name: "Software y Licencias",
-          may: { budgeted: 13700, spent: -13504, balance: 840 },
-          june: { budgeted: 13700, spent: -13504, balance: 1036 },
-          july: { budgeted: 13700, spent: -13504, balance: 1232 }
-        },
-        {
-          name: "Seguros",
-          may: { budgeted: 650, spent: -1237, balance: 126 },
-          june: { budgeted: 650, spent: 0, balance: 776 },
-          july: { budgeted: 650, spent: -1237, balance: 189 }
-        },
-        {
-          name: "Internet",
-          may: { budgeted: 880, spent: -873, balance: 28 },
-          june: { budgeted: 880, spent: -873, balance: 35 },
-          july: { budgeted: 880, spent: -873, balance: 42 }
-        },
-        {
-          name: "Electricidad",
-          may: { budgeted: 2000, spent: -2152, balance: 1162 },
-          june: { budgeted: 2000, spent: -1853, balance: 1309 },
-          july: { budgeted: 2000, spent: -1753, balance: 1556 }
-        },
-        {
-          name: "Ahorros para imprevistos",
-          may: { budgeted: 2720, spent: 0, balance: 8355 },
-          june: { budgeted: 4620, spent: 0, balance: 12975 },
-          july: { budgeted: 3720, spent: 0, balance: 16695 }
+const budgetDataByYear: { [key: number]: { [key: string]: any } } = {
+  2023: {
+    quarters: {
+      "Oct-Dec": {
+        months: ["Oct", "Nov", "Dec"],
+        data: {
+          months: [
+            { name: "Octubre", availableFunds: 28000, overspent: 0, budgeted: -28000, forNextMonth: 0, toBudget: 0 },
+            { name: "Noviembre", availableFunds: 29000, overspent: 0, budgeted: -29000, forNextMonth: 0, toBudget: 0 },
+            { name: "Diciembre", availableFunds: 30000, overspent: 0, budgeted: -30000, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  oct: { budgeted: 18000, spent: -17500, balance: 9500 },
+                  nov: { budgeted: 19000, spent: -18200, balance: 10300 },
+                  dec: { budgeted: 19500, spent: -19000, balance: 10800 }
+                },
+                {
+                  name: "Software y Licencias",
+                  oct: { budgeted: 12000, spent: -11800, balance: 700 },
+                  nov: { budgeted: 12500, spent: -12300, balance: 900 },
+                  dec: { budgeted: 13000, spent: -12800, balance: 1100 }
+                }
+              ]
+            }
+          ]
         }
-      ]
-    },
-    {
-      name: "Gastos Diarios",
-      expanded: true,
-      total: {
-        may: { budgeted: 12050, spent: -9714, balance: 9412 },
-        june: { budgeted: 10150, spent: -11065, balance: 8497 },
-        july: { budgeted: 11050, spent: -10036, balance: 9511 }
       }
     }
-  ],
-  income: {
-    may: { received: 32000 },
-    june: { received: 32000 },
-    july: { received: 33253 }
+  },
+  2024: {
+    quarters: {
+      "Jan-Mar": {
+        months: ["Jan", "Feb", "Mar"],
+        data: {
+          months: [
+            { name: "Enero", availableFunds: 30000, overspent: 0, budgeted: -30000, forNextMonth: 0, toBudget: 0 },
+            { name: "Febrero", availableFunds: 31000, overspent: 0, budgeted: -31000, forNextMonth: 0, toBudget: 0 },
+            { name: "Marzo", availableFunds: 31500, overspent: 0, budgeted: -31000, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  jan: { budgeted: 18500, spent: -17800, balance: 9700 },
+                  feb: { budgeted: 19200, spent: -18500, balance: 10400 },
+                  mar: { budgeted: 19800, spent: -19100, balance: 11200 }
+                },
+                {
+                  name: "Software y Licencias",
+                  jan: { budgeted: 12800, spent: -12500, balance: 800 },
+                  feb: { budgeted: 13200, spent: -12900, balance: 1100 },
+                  mar: { budgeted: 13500, spent: -13200, balance: 1400 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Apr-Jun": {
+        months: ["Apr", "May", "Jun"],
+        data: {
+          months: [
+            { name: "Abril", availableFunds: 31000, overspent: 0, budgeted: -31000, forNextMonth: 0, toBudget: 0 },
+            { name: "Mayo", availableFunds: 32000, overspent: 0, budgeted: -32000, forNextMonth: 0, toBudget: 0 },
+            { name: "Junio", availableFunds: 32000, overspent: 0, budgeted: -32000, forNextMonth: 0, toBudget: 0 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  apr: { budgeted: 19500, spent: -18800, balance: 10200 },
+                  may: { budgeted: 19950, spent: -17766, balance: 10511 },
+                  jun: { budgeted: 21850, spent: -16230, balance: 16131 }
+                },
+                {
+                  name: "Software y Licencias",
+                  apr: { budgeted: 13200, spent: -13000, balance: 700 },
+                  may: { budgeted: 13700, spent: -13504, balance: 840 },
+                  jun: { budgeted: 13700, spent: -13504, balance: 1036 }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Jul-Sep": {
+        months: ["Jul", "Aug", "Sep"],
+        data: {
+          months: [
+            { name: "Julio", availableFunds: 33253, overspent: 0, budgeted: -32000, forNextMonth: 0, toBudget: 1253 },
+            { name: "Agosto", availableFunds: 33500, overspent: 0, budgeted: -33000, forNextMonth: 0, toBudget: 500 },
+            { name: "Septiembre", availableFunds: 34000, overspent: 0, budgeted: -33500, forNextMonth: 0, toBudget: 500 }
+          ],
+          categories: [
+            {
+              name: "Gastos Realmente Importantes",
+              expanded: true,
+              items: [
+                {
+                  name: "Nómina y Salarios",
+                  jul: { budgeted: 20950, spent: -17367, balance: 19714 },
+                  aug: { budgeted: 21500, spent: -20800, balance: 11200 },
+                  sep: { budgeted: 22000, spent: -21200, balance: 12300 }
+                },
+                {
+                  name: "Software y Licencias",
+                  jul: { budgeted: 13700, spent: -13504, balance: 1232 },
+                  aug: { budgeted: 14000, spent: -13800, balance: 1400 },
+                  sep: { budgeted: 14200, spent: -14000, balance: 1600 }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
   }
 };
+
+const quarters = [
+  { name: "Jan-Mar", months: ["Jan", "Feb", "Mar"] },
+  { name: "Apr-Jun", months: ["Apr", "May", "Jun"] },
+  { name: "Jul-Sep", months: ["Jul", "Aug", "Sep"] },
+  { name: "Oct-Dec", months: ["Oct", "Nov", "Dec"] }
+];
 
 const formatNumber = (num: number) => {
   if (num === 0) return "0";
@@ -101,26 +152,16 @@ const formatNumber = (num: number) => {
 const Budget = () => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["Gastos Realmente Importantes", "Gastos Diarios"]);
   const [selectedYear, setSelectedYear] = useState(2024);
-  const [selectedMonths, setSelectedMonths] = useState(["May", "Jun", "Jul"]);
+  const [selectedQuarter, setSelectedQuarter] = useState("Apr-Jun");
 
   const years = [2023, 2024, 2025];
-  const allMonths = [
-    { name: "Nov", year: 2023 },
-    { name: "Dec", year: 2023 },
-    { name: "Jan", year: 2024 },
-    { name: "Feb", year: 2024 },
-    { name: "Mar", year: 2024 },
-    { name: "Apr", year: 2024 },
-    { name: "May", year: 2024 },
-    { name: "Jun", year: 2024 },
-    { name: "Jul", year: 2024 },
-    { name: "Aug", year: 2024 },
-    { name: "Sep", year: 2024 },
-    { name: "Oct", year: 2024 },
-    { name: "Nov", year: 2024 },
-    { name: "Dec", year: 2024 },
-    { name: "Jan", year: 2025 }
-  ];
+  
+  const availableQuarters = budgetDataByYear[selectedYear]?.quarters ? Object.keys(budgetDataByYear[selectedYear].quarters) : [];
+  
+  const currentData = budgetDataByYear[selectedYear]?.quarters[selectedQuarter]?.data || {
+    months: [],
+    categories: []
+  };
 
   const toggleCategory = (categoryName: string) => {
     setExpandedCategories(prev =>
@@ -130,12 +171,18 @@ const Budget = () => {
     );
   };
 
-  const toggleMonth = (monthName: string) => {
-    setSelectedMonths(prev =>
-      prev.includes(monthName)
-        ? prev.filter(name => name !== monthName)
-        : [...prev, monthName].slice(0, 3) // Máximo 3 meses
-    );
+  const handleYearChange = (year: number) => {
+    setSelectedYear(year);
+    // Seleccionar el primer trimestre disponible para el año
+    const firstQuarter = Object.keys(budgetDataByYear[year]?.quarters || {})[0];
+    if (firstQuarter) {
+      setSelectedQuarter(firstQuarter);
+    }
+  };
+
+  const getCurrentMonthKeys = () => {
+    const quarter = quarters.find(q => q.name === selectedQuarter);
+    return quarter ? quarter.months.map(m => m.toLowerCase()) : [];
   };
 
   return (
@@ -152,7 +199,7 @@ const Budget = () => {
               {years.map((year) => (
                 <button
                   key={year}
-                  onClick={() => setSelectedYear(year)}
+                  onClick={() => handleYearChange(year)}
                   className={`px-8 py-3 text-sm font-medium transition-colors ${
                     selectedYear === year
                       ? "bg-primary text-primary-foreground"
@@ -164,26 +211,26 @@ const Budget = () => {
               ))}
             </div>
             
-            {/* Months Row */}
+            {/* Quarters Row */}
             <div className="flex items-center justify-center overflow-x-auto">
-              {allMonths.map((month, index) => (
+              {availableQuarters.map((quarter) => (
                 <button
-                  key={`${month.name}-${month.year}-${index}`}
-                  onClick={() => toggleMonth(month.name)}
-                  className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-r last:border-r-0 ${
-                    selectedMonths.includes(month.name)
+                  key={quarter}
+                  onClick={() => setSelectedQuarter(quarter)}
+                  className={`px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors border-r last:border-r-0 ${
+                    selectedQuarter === quarter
                       ? "bg-purple-100 text-purple-700 border-purple-200"
                       : "hover:bg-muted/50 text-muted-foreground"
                   }`}
                 >
-                  {month.name}
+                  {quarter}
                 </button>
               ))}
             </div>
           </div>
           {/* Month Cards */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            {budgetData.months.map((month, index) => (
+            {currentData.months.map((month, index) => (
               <Card key={index} className="p-4">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-lg font-semibold">{month.name}</h3>
@@ -241,8 +288,8 @@ const Budget = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {budgetData.categories.map((category, categoryIndex) => (
-                      <React.Fragment key={categoryIndex}>
+                    {currentData.categories.map((category, categoryIndex) => (
+                      <div key={categoryIndex}>
                         <TableRow className="hover:bg-muted/20">
                           <TableCell className="flex items-center gap-2 py-3">
                             <Button
@@ -259,50 +306,37 @@ const Budget = () => {
                             <span className="font-medium">{category.name}</span>
                           </TableCell>
                           
-                          {category.total && (
-                            <>
-                              <TableCell className="text-center">{formatNumber(category.total.may.budgeted)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.may.spent)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.may.balance)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.june.budgeted)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.june.spent)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.june.balance)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.july.budgeted)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.july.spent)}</TableCell>
-                              <TableCell className="text-center">{formatNumber(category.total.july.balance)}</TableCell>
-                            </>
-                          )}
-                          
-                          {!category.total && (
-                            <>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                              <TableCell className="text-center"></TableCell>
-                            </>
-                          )}
+                          {/* Empty cells for category header */}
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
+                          <TableCell className="text-center"></TableCell>
                         </TableRow>
 
-                        {expandedCategories.includes(category.name) && category.items && category.items.map((item, itemIndex) => (
-                          <TableRow key={itemIndex} className="hover:bg-muted/10">
-                            <TableCell className="pl-12">{item.name}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.may.budgeted)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.may.spent)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.may.balance)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.june.budgeted)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.june.spent)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.june.balance)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.july.budgeted)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.july.spent)}</TableCell>
-                            <TableCell className="text-center">{formatNumber(item.july.balance)}</TableCell>
-                          </TableRow>
-                        ))}
-                      </React.Fragment>
+                        {expandedCategories.includes(category.name) && category.items && category.items.map((item, itemIndex) => {
+                          const monthKeys = getCurrentMonthKeys();
+                          return (
+                            <TableRow key={itemIndex} className="hover:bg-muted/10">
+                              <TableCell className="pl-12">{item.name}</TableCell>
+                              {monthKeys.map((monthKey, idx) => {
+                                const monthData = item[monthKey] || { budgeted: 0, spent: 0, balance: 0 };
+                                return (
+                                  <React.Fragment key={`${monthKey}-${idx}`}>
+                                    <TableCell className="text-center">{formatNumber(monthData.budgeted)}</TableCell>
+                                    <TableCell className="text-center">{formatNumber(monthData.spent)}</TableCell>
+                                    <TableCell className="text-center">{formatNumber(monthData.balance)}</TableCell>
+                                  </React.Fragment>
+                                );
+                              })}
+                            </TableRow>
+                          );
+                        })}
+                      </div>
                     ))}
 
                     {/* Add Group Button */}
@@ -341,13 +375,13 @@ const Budget = () => {
                       <TableCell></TableCell>
                       <TableCell className="text-center"></TableCell>
                       <TableCell className="text-center"></TableCell>
-                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.may.received)}</TableCell>
+                      <TableCell className="text-center font-bold">32000</TableCell>
                       <TableCell className="text-center"></TableCell>
                       <TableCell className="text-center"></TableCell>
-                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.june.received)}</TableCell>
+                      <TableCell className="text-center font-bold">32000</TableCell>
                       <TableCell className="text-center"></TableCell>
                       <TableCell className="text-center"></TableCell>
-                      <TableCell className="text-center font-bold">{formatNumber(budgetData.income.july.received)}</TableCell>
+                      <TableCell className="text-center font-bold">33253</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
