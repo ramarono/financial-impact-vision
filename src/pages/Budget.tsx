@@ -100,12 +100,41 @@ const formatNumber = (num: number) => {
 
 const Budget = () => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["Gastos Realmente Importantes", "Gastos Diarios"]);
+  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedMonths, setSelectedMonths] = useState(["May", "Jun", "Jul"]);
+
+  const years = [2023, 2024, 2025];
+  const allMonths = [
+    { name: "Nov", year: 2023 },
+    { name: "Dec", year: 2023 },
+    { name: "Jan", year: 2024 },
+    { name: "Feb", year: 2024 },
+    { name: "Mar", year: 2024 },
+    { name: "Apr", year: 2024 },
+    { name: "May", year: 2024 },
+    { name: "Jun", year: 2024 },
+    { name: "Jul", year: 2024 },
+    { name: "Aug", year: 2024 },
+    { name: "Sep", year: 2024 },
+    { name: "Oct", year: 2024 },
+    { name: "Nov", year: 2024 },
+    { name: "Dec", year: 2024 },
+    { name: "Jan", year: 2025 }
+  ];
 
   const toggleCategory = (categoryName: string) => {
     setExpandedCategories(prev =>
       prev.includes(categoryName)
         ? prev.filter(name => name !== categoryName)
         : [...prev, categoryName]
+    );
+  };
+
+  const toggleMonth = (monthName: string) => {
+    setSelectedMonths(prev =>
+      prev.includes(monthName)
+        ? prev.filter(name => name !== monthName)
+        : [...prev, monthName].slice(0, 3) // Máximo 3 meses
     );
   };
 
@@ -116,6 +145,42 @@ const Budget = () => {
       
       <main className="ml-64 pt-16 p-4">
         <div className="max-w-full">
+          {/* Year and Month Navigation */}
+          <div className="mb-6 bg-card rounded-lg border">
+            {/* Years Row */}
+            <div className="flex items-center justify-center border-b bg-muted/20 rounded-t-lg">
+              {years.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`px-8 py-3 text-sm font-medium transition-colors ${
+                    selectedYear === year
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+            
+            {/* Months Row */}
+            <div className="flex items-center justify-center overflow-x-auto">
+              {allMonths.map((month, index) => (
+                <button
+                  key={`${month.name}-${month.year}-${index}`}
+                  onClick={() => toggleMonth(month.name)}
+                  className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-r last:border-r-0 ${
+                    selectedMonths.includes(month.name)
+                      ? "bg-purple-100 text-purple-700 border-purple-200"
+                      : "hover:bg-muted/50 text-muted-foreground"
+                  }`}
+                >
+                  {month.name}
+                </button>
+              ))}
+            </div>
+          </div>
           {/* Month Cards */}
           <div className="grid grid-cols-3 gap-4 mb-6">
             {budgetData.months.map((month, index) => (
