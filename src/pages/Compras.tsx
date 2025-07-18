@@ -20,8 +20,9 @@ const Compras = () => {
     samplePurchaseData.forEach(data => addPurchaseData(data));
   };
 
-  const handleImportCSV = (file: File) => {
-    console.log('Importing purchases CSV:', file.name);
+  const handleImportCSV = (data: any[]) => {
+    data.forEach(record => addPurchaseData(record));
+    console.log('Imported', data.length, 'purchase records');
   };
 
   const handleManualEntry = (data: any) => {
@@ -178,10 +179,9 @@ Dic 2024,Proveedor Ejemplo,Materiales,85000,2024-12-30,Al día,28`;
             <QuickDataLoader
               title="Datos de Compras"
               description="Gestiona proveedores, montos, fechas de vencimiento y estados de pago"
-              onLoadSampleData={handleLoadSampleData}
               onImportCSV={handleImportCSV}
               onManualEntry={handleManualEntry}
-              sampleDataCount={6}
+              onLoadToDashboard={handleLoadSampleData}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
             />
