@@ -1,5 +1,5 @@
 
-import { BarChart3, DollarSign, TrendingUp, PieChart, Settings, Home, Database, ShoppingCart, Calculator } from "lucide-react";
+import { BarChart3, DollarSign, TrendingUp, PieChart, Home, ShoppingCart, Calculator } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
@@ -11,8 +11,6 @@ const navigationItems = [
   { icon: Calculator, label: "Budget", path: "/budget", active: false },
   { icon: BarChart3, label: "KPIs", path: "/kpis", active: false },
   { icon: PieChart, label: "Análisis", path: "/analysis", active: false },
-  { icon: Database, label: "Carga de Datos", path: "/carga-datos", active: false },
-  { icon: Settings, label: "Configuración", path: "/configuracion", active: false },
 ];
 
 const Navigation = () => {

@@ -6,9 +6,44 @@ import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, ShoppingCart, Clock, DollarSign, Users, AlertTriangle, CheckCircle } from "lucide-react";
 import { useDataContext } from "@/contexts/DataContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import QuickDataLoader from "@/components/QuickDataLoader";
 
 const Compras = () => {
-  const { purchaseData } = useDataContext();
+  const { purchaseData, addPurchaseData } = useDataContext();
+
+  const handleLoadSampleData = () => {
+    const samplePurchaseData = [
+      { id: Date.now().toString(), month: 'Dic 2024', proveedor: 'Nuevo Proveedor A', categoria: 'Materiales', monto: 75000, fechaVencimiento: '2024-12-30', estado: 'Al día', diasPago: 25 },
+      { id: (Date.now() + 1).toString(), month: 'Dic 2024', proveedor: 'Nuevo Proveedor B', categoria: 'Servicios', monto: 48000, fechaVencimiento: '2025-01-15', estado: 'Pendiente', diasPago: 30 }
+    ];
+    
+    samplePurchaseData.forEach(data => addPurchaseData(data));
+  };
+
+  const handleImportCSV = (file: File) => {
+    console.log('Importing purchases CSV:', file.name);
+  };
+
+  const handleManualEntry = (data: any) => {
+    const newPurchaseData = {
+      id: Date.now().toString(),
+      ...data
+    };
+    addPurchaseData(newPurchaseData);
+  };
+
+  const csvTemplate = `mes,proveedor,categoria,monto,fechaVencimiento,estado,diasPago
+Dic 2024,Proveedor Ejemplo,Materiales,85000,2024-12-30,Al día,28`;
+
+  const manualFields = [
+    { name: 'month', label: 'Mes', type: 'text' as const, required: true },
+    { name: 'proveedor', label: 'Proveedor', type: 'text' as const, required: true },
+    { name: 'categoria', label: 'Categoría', type: 'select' as const, options: ['Materiales', 'Servicios', 'Tecnología', 'Mantenimiento', 'Otros'], required: true },
+    { name: 'monto', label: 'Monto', type: 'number' as const, required: true },
+    { name: 'fechaVencimiento', label: 'Fecha Vencimiento', type: 'text' as const, required: true },
+    { name: 'estado', label: 'Estado', type: 'select' as const, options: ['Al día', 'Pendiente', 'Vencido'], required: true },
+    { name: 'diasPago', label: 'Días de Pago', type: 'number' as const, required: true }
+  ];
 
   // KPIs principales para compras y cuentas por pagar
   const purchaseKPIs = [
@@ -74,7 +109,6 @@ const Compras = () => {
     }
   ];
 
-  // Datos históricos de compras
   const monthlyPurchases = [
     { month: "Ago", compras: 280000, pagos: 265000, pendientes: 15000 },
     { month: "Sep", compras: 320000, pagos: 285000, pendientes: 50000 },
@@ -83,7 +117,6 @@ const Compras = () => {
     { month: "Dic", compras: 310000, pagos: 295000, pendientes: 65000 }
   ];
 
-  // Distribución por categoría de compras
   const purchaseCategories = [
     { name: "Materiales", value: 45, amount: 450000, color: "#3b82f6" },
     { name: "Servicios", value: 25, amount: 250000, color: "#10b981" },
@@ -92,7 +125,6 @@ const Compras = () => {
     { name: "Otros", value: 5, amount: 50000, color: "#8b5cf6" }
   ];
 
-  // Estado de cuentas por pagar por vencimiento
   const payableStatus = [
     { category: "Al día", amount: 450000, percentage: 65, color: "#10b981" },
     { category: "1-30 días", amount: 150000, percentage: 21, color: "#f59e0b" },
@@ -139,6 +171,20 @@ const Compras = () => {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Quick Data Loader */}
+          <div className="mb-8 animate-slide-up">
+            <QuickDataLoader
+              title="Datos de Compras"
+              description="Gestiona proveedores, montos, fechas de vencimiento y estados de pago"
+              onLoadSampleData={handleLoadSampleData}
+              onImportCSV={handleImportCSV}
+              onManualEntry={handleManualEntry}
+              sampleDataCount={6}
+              csvTemplate={csvTemplate}
+              manualEntryFields={manualFields}
+            />
           </div>
 
           {/* KPI Cards Grid */}

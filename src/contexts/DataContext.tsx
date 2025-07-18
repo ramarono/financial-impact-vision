@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Type definitions for all data structures
@@ -36,6 +37,17 @@ export interface CustomerData {
   ingresos: number;
   crecimiento: number;
   segmento: string;
+}
+
+export interface BudgetData {
+  id: string;
+  month: string;
+  categoria: string;
+  presupuestado: number;
+  actual: number;
+  variacion: number;
+  departamento: string;
+  responsable?: string;
 }
 
 // Nuevos tipos para datos específicos del dashboard
@@ -95,6 +107,13 @@ interface DataContextType {
   addCustomerData: (data: CustomerData) => void;
   updateCustomerData: (id: string, data: Partial<CustomerData>) => void;
   deleteCustomerData: (id: string) => void;
+
+  // Budget data
+  budgetData: BudgetData[];
+  setBudgetData: (data: BudgetData[]) => void;
+  addBudgetData: (data: BudgetData) => void;
+  updateBudgetData: (id: string, data: Partial<BudgetData>) => void;
+  deleteBudgetData: (id: string) => void;
 
   // Dashboard metrics
   dashboardMetrics: DashboardMetrics[];
@@ -165,6 +184,12 @@ const initialCustomerData: CustomerData[] = [
   { id: '3', nombre: 'Servicios DEF Ltda.', ingresos: 650000, crecimiento: 25.0, segmento: 'SMB' }
 ];
 
+const initialBudgetData: BudgetData[] = [
+  { id: '1', month: 'Oct 2024', categoria: 'Ingresos', presupuestado: 750000, actual: 780000, variacion: 4.0, departamento: 'Ventas', responsable: 'Juan Pérez' },
+  { id: '2', month: 'Oct 2024', categoria: 'Nómina', presupuestado: 230000, actual: 220000, variacion: -4.3, departamento: 'RRHH', responsable: 'María González' },
+  { id: '3', month: 'Nov 2024', categoria: 'Marketing', presupuestado: 60000, actual: 58000, variacion: -3.3, departamento: 'Marketing', responsable: 'Carlos Silva' }
+];
+
 const initialDashboardMetrics: DashboardMetrics[] = [
   { id: '1', totalIngresos: 780000, totalCostos: 425000, margenBruto: 355000, crecimientoMensual: 5.2, month: 'Oct 2024' },
   { id: '2', totalIngresos: 820000, totalCostos: 437000, margenBruto: 383000, crecimientoMensual: 5.1, month: 'Nov 2024' }
@@ -189,6 +214,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [costData, setCostData] = useState<CostData[]>(initialCostData);
   const [kpiData, setKpiData] = useState<KPIData[]>(initialKPIData);
   const [customerData, setCustomerData] = useState<CustomerData[]>(initialCustomerData);
+  const [budgetData, setBudgetData] = useState<BudgetData[]>(initialBudgetData);
   const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics[]>(initialDashboardMetrics);
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>(initialHistoricalData);
   const [purchaseData, setPurchaseData] = useState<PurchaseData[]>(initialPurchaseData);
@@ -251,6 +277,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const deleteCustomerData = (id: string) => {
     setCustomerData(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Budget data functions
+  const addBudgetData = (data: BudgetData) => {
+    setBudgetData(prev => [...prev, data]);
+  };
+
+  const updateBudgetData = (id: string, updatedData: Partial<BudgetData>) => {
+    setBudgetData(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updatedData } : item
+    ));
+  };
+
+  const deleteBudgetData = (id: string) => {
+    setBudgetData(prev => prev.filter(item => item.id !== id));
   };
 
   // Dashboard metrics functions
@@ -333,6 +374,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       costs: costData,
       kpis: kpiData,
       customers: customerData,
+      budget: budgetData,
       dashboardMetrics: dashboardMetrics,
       historicalData: historicalData,
       purchases: purchaseData,
@@ -354,6 +396,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (data.costs) setCostData(data.costs);
     if (data.kpis) setKpiData(data.kpis);
     if (data.customers) setCustomerData(data.customers);
+    if (data.budget) setBudgetData(data.budget);
     if (data.dashboardMetrics) setDashboardMetrics(data.dashboardMetrics);
     if (data.historicalData) setHistoricalData(data.historicalData);
     if (data.purchases) setPurchaseData(data.purchases);
@@ -364,6 +407,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCostData([]);
     setKpiData([]);
     setCustomerData([]);
+    setBudgetData([]);
     setDashboardMetrics([]);
     setHistoricalData([]);
     setPurchaseData([]);
@@ -390,6 +434,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     addCustomerData,
     updateCustomerData,
     deleteCustomerData,
+    budgetData,
+    setBudgetData,
+    addBudgetData,
+    updateBudgetData,
+    deleteBudgetData,
     dashboardMetrics,
     setDashboardMetrics,
     addDashboardMetrics,

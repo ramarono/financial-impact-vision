@@ -5,9 +5,45 @@ import MetricCard from "@/components/MetricCard";
 import RevenueChart from "@/components/RevenueChart";
 import KPIChart from "@/components/KPIChart";
 import ProjectionsSection from "@/components/ProjectionsSection";
+import QuickDataLoader from "@/components/QuickDataLoader";
 import { DollarSign, TrendingUp, TrendingDown, BarChart3, Users, Target } from "lucide-react";
+import { useDataContext } from "@/contexts/DataContext";
 
 const Index = () => {
+  const { addRevenueData, addCostData, addDashboardMetrics } = useDataContext();
+
+  const handleLoadSampleData = () => {
+    // Load sample dashboard data
+    const sampleData = [
+      { id: Date.now().toString(), month: 'Dic 2024', ingresos: 890000, meta: 850000, cliente: 'Cliente Sample', categoria: 'Servicios' },
+      { id: (Date.now() + 1).toString(), month: 'Dic 2024', nomina: 235000, materiales: 98000, servicios: 67000, marketing: 62000 }
+    ];
+    
+    addRevenueData(sampleData[0]);
+    addCostData(sampleData[1]);
+  };
+
+  const handleImportCSV = (file: File) => {
+    // Basic CSV processing (in real app, parse and validate)
+    console.log('Importing CSV file:', file.name);
+  };
+
+  const handleManualEntry = (data: any) => {
+    // Process manual entry data
+    console.log('Adding manual data:', data);
+  };
+
+  const csvTemplate = `mes,ingresos,meta,cliente,categoria
+Dic 2024,850000,800000,Cliente Ejemplo,Servicios`;
+
+  const manualFields = [
+    { name: 'month', label: 'Mes', type: 'text' as const, required: true },
+    { name: 'ingresos', label: 'Ingresos', type: 'number' as const, required: true },
+    { name: 'meta', label: 'Meta', type: 'number' as const, required: true },
+    { name: 'cliente', label: 'Cliente', type: 'text' as const },
+    { name: 'categoria', label: 'Categoría', type: 'select' as const, options: ['Servicios', 'Tecnología', 'Manufactura'] }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <Header />
@@ -23,6 +59,20 @@ const Index = () => {
             <p className="text-gray-600">
               Resumen ejecutivo de tu rendimiento financiero en tiempo real
             </p>
+          </div>
+
+          {/* Quick Data Loader */}
+          <div className="mb-8 animate-slide-up">
+            <QuickDataLoader
+              title="Datos del Dashboard"
+              description="Gestiona los datos principales del dashboard de forma rápida y eficiente"
+              onLoadSampleData={handleLoadSampleData}
+              onImportCSV={handleImportCSV}
+              onManualEntry={handleManualEntry}
+              sampleDataCount={3}
+              csvTemplate={csvTemplate}
+              manualEntryFields={manualFields}
+            />
           </div>
 
           {/* Metrics Grid */}
