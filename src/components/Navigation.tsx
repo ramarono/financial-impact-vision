@@ -18,7 +18,7 @@ const Navigation = () => {
   const location = useLocation();
 
   return (
-    <nav className="bg-white/50 backdrop-blur-sm border-r border-gray-200/50 w-64 fixed left-0 top-16 h-[calc(100vh-4rem)] z-40">
+    <nav className="bg-sidebar border-r border-sidebar-border w-64 fixed left-0 top-16 h-[calc(100vh-4rem)] z-40">
       <div className="p-6">
         <div className="space-y-2">
           {navigationItems.map((item, index) => {
@@ -30,13 +30,13 @@ const Navigation = () => {
                 className={cn(
                   "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200",
                   isActive 
-                    ? "bg-blue-50 text-blue-700 border border-blue-200" 
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                    : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
                 )}
               >
                 <item.icon className={cn(
                   "h-5 w-5",
-                  isActive ? "text-blue-600" : "text-gray-500"
+                  isActive ? "text-sidebar-accent-foreground" : "text-sidebar-foreground"
                 )} />
                 <span className="font-medium">{item.label}</span>
               </Link>
