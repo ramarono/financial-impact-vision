@@ -184,6 +184,8 @@ Dic 2024,Proveedor Ejemplo,Materiales,85000,2024-12-30,Al día,28`;
               onLoadToDashboard={handleLoadSampleData}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
+              expectedFields={['proveedor', 'categoria', 'monto', 'estado']}
+              autoUpdateOnLoad={true}
             />
           </div>
 

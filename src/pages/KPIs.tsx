@@ -7,9 +7,45 @@ import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, Target, Users, DollarSign, Zap } from "lucide-react";
 import { useDataContext } from "@/contexts/DataContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, RadialBarChart, RadialBar, Legend } from 'recharts';
+import QuickDataLoader from "@/components/QuickDataLoader";
 
 const KPIs = () => {
-  const { kpiData, getTotalRevenue, getTotalCosts, getMarginBruto } = useDataContext();
+  const { kpiData, addKpiData, getTotalRevenue, getTotalCosts, getMarginBruto } = useDataContext();
+
+  const handleImportCSV = (data: any[]) => {
+    data.forEach(row => {
+      if (row.nombre && row.valor && row.meta) {
+        addKpiData({
+          id: row.id || Date.now().toString(),
+          month: row.month || new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
+          nombre: row.nombre,
+          valor: row.valor,
+          meta: row.meta,
+          unidad: row.unidad || '%'
+        });
+      }
+    });
+  };
+
+  const handleManualEntry = (data: any) => {
+    const newKpiData = {
+      id: Date.now().toString(),
+      ...data
+    };
+    addKpiData(newKpiData);
+  };
+
+  const csvTemplate = `nombre,valor,meta,unidad,month
+Tasa de Utilización,78,85,%,Dic 2024
+Satisfacción del Cliente,4.2,4.5,/5,Dic 2024`;
+
+  const manualFields = [
+    { name: 'nombre', label: 'Nombre del KPI', type: 'text' as const, required: true },
+    { name: 'valor', label: 'Valor Actual', type: 'number' as const, required: true },
+    { name: 'meta', label: 'Meta', type: 'number' as const, required: true },
+    { name: 'unidad', label: 'Unidad', type: 'text' as const, required: true },
+    { name: 'month', label: 'Mes', type: 'text' as const, required: true }
+  ];
 
   // KPIs específicos para consultoría tecnológica
   const consultingKPIs = [
@@ -124,6 +160,20 @@ const KPIs = () => {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Quick Data Loader */}
+          <div className="mb-8 animate-slide-up">
+            <QuickDataLoader
+              title="Datos de KPIs"
+              description="Gestiona los indicadores clave de rendimiento de tu consultoría"
+              onImportCSV={handleImportCSV}
+              onManualEntry={handleManualEntry}
+              csvTemplate={csvTemplate}
+              manualEntryFields={manualFields}
+              expectedFields={['nombre', 'valor', 'meta', 'unidad']}
+              autoUpdateOnLoad={true}
+            />
           </div>
 
           {/* KPI Cards Grid */}

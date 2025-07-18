@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronDown, ChevronRight, MoreHorizontal, Calculator } from "lucide-react";
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
+import QuickDataLoader from "@/components/QuickDataLoader";
+import { useDataContext } from "@/contexts/DataContext";
 
 const budgetDataByYear: { [key: number]: { [key: string]: any } } = {
   2023: {
@@ -334,9 +336,49 @@ const formatNumber = (num: number) => {
 };
 
 const Budget = () => {
+  const { addBudgetData } = useDataContext();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["Gastos Realmente Importantes", "Gastos Diarios"]);
   const [selectedYear, setSelectedYear] = useState(2024);
   const [selectedQuarter, setSelectedQuarter] = useState("Apr-Jun");
+
+  const handleImportCSV = (data: any[]) => {
+    data.forEach(row => {
+      if (row.categoria && row.presupuestado && row.actual) {
+        addBudgetData({
+          id: row.id || Date.now().toString(),
+          month: row.month || new Date().toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }),
+          categoria: row.categoria,
+          presupuestado: row.presupuestado,
+          actual: row.actual,
+          variacion: ((row.actual - row.presupuestado) / row.presupuestado) * 100,
+          departamento: row.departamento || 'General',
+          responsable: row.responsable
+        });
+      }
+    });
+  };
+
+  const handleManualEntry = (data: any) => {
+    const newBudgetData = {
+      id: Date.now().toString(),
+      variacion: ((data.actual - data.presupuestado) / data.presupuestado) * 100,
+      ...data
+    };
+    addBudgetData(newBudgetData);
+  };
+
+  const csvTemplate = `categoria,presupuestado,actual,departamento,responsable,month
+Nómina y Salarios,180000,175000,RRHH,Juan Pérez,Dic 2024
+Software y Licencias,15000,14500,IT,María González,Dic 2024`;
+
+  const manualFields = [
+    { name: 'categoria', label: 'Categoría', type: 'text' as const, required: true },
+    { name: 'presupuestado', label: 'Presupuestado', type: 'number' as const, required: true },
+    { name: 'actual', label: 'Actual', type: 'number' as const, required: true },
+    { name: 'departamento', label: 'Departamento', type: 'text' as const, required: true },
+    { name: 'responsable', label: 'Responsable', type: 'text' as const },
+    { name: 'month', label: 'Mes', type: 'text' as const, required: true }
+  ];
 
   const years = [2023, 2024, 2025];
   
@@ -376,6 +418,37 @@ const Budget = () => {
       
       <main className="ml-64 pt-16 p-4">
         <div className="max-w-full">
+          {/* Header Section */}
+          <div className="mb-8 animate-slide-up">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <Calculator className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  Gestión de Presupuesto
+                </h2>
+                <p className="text-gray-600">
+                  Control y seguimiento de presupuestos por categorías y departamentos
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Data Loader */}
+          <div className="mb-8 animate-slide-up">
+            <QuickDataLoader
+              title="Datos de Presupuesto"
+              description="Gestiona presupuestos, gastos actuales y variaciones por departamento"
+              onImportCSV={handleImportCSV}
+              onManualEntry={handleManualEntry}
+              csvTemplate={csvTemplate}
+              manualEntryFields={manualFields}
+              expectedFields={['categoria', 'presupuestado', 'actual', 'departamento']}
+              autoUpdateOnLoad={true}
+            />
+          </div>
+
           {/* Year and Month Navigation */}
           <div className="mb-6 bg-card rounded-lg border">
             {/* Years Row */}

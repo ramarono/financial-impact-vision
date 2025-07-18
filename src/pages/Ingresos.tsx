@@ -97,6 +97,8 @@ const Ingresos = () => {
               onManualEntry={handleManualEntry}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
+              expectedFields={['mes', 'año', 'ingresos', 'meta', 'cliente']}
+              autoUpdateOnLoad={true}
             />
           </div>
 

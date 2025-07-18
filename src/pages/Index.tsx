@@ -138,6 +138,8 @@ const Index = () => {
               onLoadToDashboard={handleLoadToDashboard}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
+              expectedFields={['mes', 'año', 'ingresos', 'nomina', 'materiales', 'servicios', 'marketing']}
+              autoUpdateOnLoad={true}
             />
           </div>
 

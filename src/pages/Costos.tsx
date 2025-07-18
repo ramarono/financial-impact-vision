@@ -89,6 +89,8 @@ const Costos = () => {
               onManualEntry={handleManualEntry}
               csvTemplate={csvTemplate}
               manualEntryFields={manualFields}
+              expectedFields={['mes', 'año', 'nomina', 'materiales', 'servicios', 'marketing']}
+              autoUpdateOnLoad={true}
             />
           </div>
 
